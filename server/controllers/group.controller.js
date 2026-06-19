@@ -1,0 +1,78 @@
+const Group = require('../models/Group');
+const Message = require('../models/Message');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/AppError');
+
+// creating group
+const createGroup = catchAsync(async (req, res, next) => {
+    const { title, public, members } = req.body;
+    const allMembers = members ? [...new Set([...members, req.user._id])] : [req.user._id];
+
+    const newGroup = await Group.create({
+        title,
+        public: public ?? true,
+        admin: req.user._id,
+        members: allMembers
+    });
+
+    res.status(201).json({ status: 'success', data: newGroup });
+});
+
+// getting all groups
+const getMyGroups = catchAsync(async (req, res, next) => {
+    const groups = await Group.find({ members: req.user._id })
+        .populate('admin', 'fullname profilePicture')
+        .sort('-createdAt');
+
+    res.status(200).json({ status: 'success', results: groups.length, data: groups });
+});
+
+// searching group
+const findGroup = catchAsync(async (req, res, next) => {
+    const { query } = req.query;
+    if (!query) return next(new AppError("Search term is required", 400));
+
+    const groups = await Group.find({ 
+        title: { $regex: query, $options: 'i' } 
+    }).populate('admin members', 'fullname profilePicture');
+
+    res.status(200).json({ status: 'success', data: groups });
+});
+
+// joining group
+const joinGroup = catchAsync(async (req, res, next) => {
+    const { groupId } = req.params;
+    const group = await Group.findById(groupId);
+
+    if (!group) return next(new AppError("Group not found", 404));
+
+
+    const isMember = group.members.some(memberId => memberId.equals(req.user._id));
+    if (isMember) {
+        return next(new AppError("You are already a member", 400));
+    }
+
+    group.members.push(req.user._id);
+    await group.save();
+
+    res.status(200).json({ status: 'success', data: group });
+});
+
+// deleting group
+const deleteGroup = catchAsync(async (req, res, next) => {
+    const { groupId } = req.params;
+    const group = await Group.findById(groupId);
+
+    if (!group) return next(new AppError("Group not found", 404));
+
+    if (group.admin.toString() !== req.user._id.toString()) {
+        return next(new AppError("Only the group admin can delete this group", 403));
+    }
+
+    await Message.deleteMany({ group: groupId });
+    await Group.findByIdAndDelete(groupId);
+
+    res.status(204).json({ status: 'success', data: null });
+});
+
+module.exports = { createGroup, findGroup, getMyGroups, deleteGroup, joinGroup };

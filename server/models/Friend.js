@@ -1,0 +1,26 @@
+const mongoose = require('mongoose');
+const { prependListener } = require('../models/User');
+
+const frienshipSchema = new mongoose.Schema({
+    sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    reciever: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'acccepted', 'rejected'],
+        default: pending
+    }
+}, { timestamps: true });
+
+
+friendshipSchema.index({ sender: 1, receiver: 1 }, { unique: true });
+
+const Friendship = mongoose.model('Friendship', friendshipSchema);
+module.exports = Friendship;
