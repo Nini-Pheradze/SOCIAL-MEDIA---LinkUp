@@ -30,8 +30,7 @@ const server = http.createServer(app);
 // 2. CORS-ის მაქსიმალურად მოქნილი კონფიგურაცია
 app.use(cors({ 
     origin: [
-        // 'https://social-net-silk.vercel.app',
-        // 'https://social-net-git-main-nikoloz-kvelashvilis-projects.vercel.app'
+        
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
