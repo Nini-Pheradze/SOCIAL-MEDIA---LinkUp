@@ -11,7 +11,8 @@ const session = require('cookie-session');
 const path = require('path');
 require('./config/passport');
 
-const connectDB = require('./config/conectDB');
+const connectDB = require('./config/connectDB');
+
 const authRouter = require('./routers/auth.router');
 const friendRouter = require('./routers/friendship.router');
 const messageRouter = require('./routers/message.router'); 
@@ -30,7 +31,7 @@ const server = http.createServer(app);
 // 2. CORS-ის მაქსიმალურად მოქნილი კონფიგურაცია
 app.use(cors({ 
     origin: [
-        
+        'http://localhost:5173' // 💡 აქ ჩაწერე შენი ფრონტენდის მისამართი განვითარებისას
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -44,12 +45,13 @@ app.use(morgan('dev'));
 const io = new Server(server, {
     cors: { 
         origin: [
-        
+            'http://localhost:5173' // 💡 და აქაც, სოკეტების სწორი მუშაობისთვის
         ],
         credentials: true 
     }
 });
 
+// მონაცემთა ბაზასთან დაკავშირება
 connectDB();
 
 // 3. სესიის კონფიგურაცია (გასწორებული proxy-ით)

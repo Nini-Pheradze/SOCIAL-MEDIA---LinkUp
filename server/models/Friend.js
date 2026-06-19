@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { prependListener } = require('../models/User');
 
-const frienshipSchema = new mongoose.Schema({
+const friendshipSchema = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -15,7 +15,7 @@ const frienshipSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['pending', 'acccepted', 'rejected'],
-        default: pending
+        default: 'pending'
     }
 }, { timestamps: true });
 

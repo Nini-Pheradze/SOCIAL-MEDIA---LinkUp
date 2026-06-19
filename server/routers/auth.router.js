@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport'); 
 const protect = require('../middlewares/protect.middleware');
-const { signUp, logIn, logout, updateMe } = require('../controllers/auth.controller');
+const { signUp, logIn, logOut, updateMe } = require('../controllers/auth.controller');
 const { searchUsers } = require('../controllers/friend.controller');
 const upload = require('../utils/image'); // 
 
@@ -15,7 +15,7 @@ authRouter.get('/me', protect, (req, res) => {
 
     authRouter.post('/signup', signUp);
     authRouter.post('/login', logIn);
-    authRouter.post('/logout', logout);
+    authRouter.post('/logout', logOut);
 
     authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 

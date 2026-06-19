@@ -8,7 +8,7 @@ const {
     deletePost,
     getAllPosts,
     createPost,
-    editPost } = require('../controllers/post.contrtoller');
+    editPost } = require('../controllers/post.controller');
 const protect = require('../middlewares/protect.middleware');
 const upload = require('../utils/image')
 

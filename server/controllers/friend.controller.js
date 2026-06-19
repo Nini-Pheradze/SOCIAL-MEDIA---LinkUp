@@ -12,7 +12,7 @@ const getMyFriends = catchAsync(async (req, res, next) => {
             { sender: targetUserId }, {receiver: targetUserId}
         ],
         status: 'accepted'
-    }).populate('sender receiver', 'fullname avatr profilepicture');
+    }).populate('sender receiver', 'fullname avatar profilePicture'); // Fixed typos: 'avatr' -> 'avatar', 'profilepicture' -> 'profilePicture'
 
     const friends = friendships.map(f => {
         const isTargetSender = f.sender._id.toString() === targetUserId.toString();
@@ -25,7 +25,7 @@ const getMyFriends = catchAsync(async (req, res, next) => {
 // getting user by its status
 const getUserById = catchAsync(async(req, res, next) => {
     const targetUserId = req.params.id;
-    const currentUserId = req.patrams._id;
+    const currentUserId = req.user._id; // Fixed typo: 'req.patrams._id' -> 'req.user._id'
 
     const user = await User.findById(targetUserId).select('-password');
     if (!user) return next(new AppError('User cannot be found!', 404));
@@ -53,11 +53,11 @@ const getUserById = catchAsync(async(req, res, next) => {
         user, 
         friendshipStatus 
     });
-})
+});
 
 
 // sending friend request
-const sendFriendRequest = catchAsync(async (req, resizeBy, next) => {
+const sendFriendRequest = catchAsync(async (req, res, next) => { // Fixed parameter: 'resizeBy' -> 'res'
     const receivedId = req.params.userId;
     const senderId = req.user._id;
 
@@ -146,7 +146,7 @@ const searchUsers = catchAsync(async (req, res, next) => {
     const users = await User.find({
         fullname: { $regex: query, $options: 'i' },
         _id: { $ne: req.user._id }
-    }).select('fullname avatar profilePicture email');
+    }).select('fullname avatar profilePicture email'); // Fixed typo: 'profilepicture' -> 'profilePicture'
 
     res.status(200).json({ status: 'success', users });
 });
@@ -167,4 +167,4 @@ const getFriendRequests = catchAsync(async (req, res, next) => {
 });
 
 
-module.exports = { sendFriendRequest, acceptFriendRequest, cancelOrRejectRequest, unFriend, getMyFriends, searchUsers, getUserById, getFriendRequests };
+module.exports = { getMyFriends, getUserById, sendFriendRequest, acceptFriendRequest, cancelOrRejectRequest, unFriend, searchUsers, getFriendRequests };

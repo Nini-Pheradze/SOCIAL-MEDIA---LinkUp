@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI);
-
-        console.log(`DB Connection success`);
-    } catch(err) {
-        console.error(err);
+        await mongoose.connect(process.env.MONGO_URI); 
+        console.log('MongoDB connected locally...');
+    } catch (err) {
+        console.error('Connection error:', err.message);
+        process.exit(1);
     }
 };
 
