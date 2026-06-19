@@ -44,8 +44,7 @@ app.use(morgan('dev'));
 const io = new Server(server, {
     cors: { 
         origin: [
-        'https://social-net-silk.vercel.app',
-        'https://social-net-git-main-nikoloz-kvelashvilis-projects.vercel.app'
+        
         ],
         credentials: true 
     }
