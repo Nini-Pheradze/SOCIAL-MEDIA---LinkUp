@@ -31,7 +31,8 @@ const server = http.createServer(app);
 // 2. CORS-ის მაქსიმალურად მოქნილი კონფიგურაცია
 app.use(cors({ 
     origin: [
-        'http://localhost:5173' // 💡 აქ ჩაწერე შენი ფრონტენდის მისამართი განვითარებისას
+        'http://localhost:5173',
+        'http://localhost:5174'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
