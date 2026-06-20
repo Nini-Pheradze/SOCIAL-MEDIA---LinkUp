@@ -1,10 +1,5 @@
 const express = require('express');
-const { 
-    sendMessage, 
-    getMessages, 
-    editMessage,   
-    deleteMessage  
-} = require('../controllers/message.controller');
+const { sendMessage, getMessages, editMessage,   deleteMessage } = require('../controllers/message.controller');
 const protect = require('../middlewares/protect.middleware');
 const upload = require('../utils/image');
 const messageRouter = express.Router();

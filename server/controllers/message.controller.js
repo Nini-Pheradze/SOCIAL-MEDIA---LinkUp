@@ -1,5 +1,5 @@
 const Message = require('../models/Message');
-const catchAsync = require('../utils/CatchAsync');
+const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 
 const sendMessage = catchAsync(async (req, res, next) => {
