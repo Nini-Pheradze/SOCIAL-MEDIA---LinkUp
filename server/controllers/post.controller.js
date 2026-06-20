@@ -1,6 +1,6 @@
 const Post = require('../models/Post');
 const Comment = require('../models/Comment'); 
-const catchAsync = require('../utils/CatchAsync');
+const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 
 // to get all posts with comments
