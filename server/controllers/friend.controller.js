@@ -146,7 +146,7 @@ const searchUsers = catchAsync(async (req, res, next) => {
     const users = await User.find({
         fullname: { $regex: query, $options: 'i' },
         _id: { $ne: req.user._id }
-    }).select('fullname avatar profilePicture email'); // Fixed typo: 'profilepicture' -> 'profilePicture'
+    }).select('fullname avatar profilePicture email');
 
     res.status(200).json({ status: 'success', users });
 });

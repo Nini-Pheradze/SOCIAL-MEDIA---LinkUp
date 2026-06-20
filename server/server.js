@@ -11,6 +11,8 @@ const session = require('cookie-session');
 const path = require('path');
 require('./config/passport');
 
+// https://social-media-linkup-6.onrender.com
+
 const connectDB = require('./config/connectDB');
 
 const authRouter = require('./routers/auth.router');
@@ -23,17 +25,14 @@ const globalErrorHandler = require('./controllers/error.controller');
 
 const app = express();
 
-// 1. Render-ისთვის აუცილებელი პარამეტრი
+// Render-ისთვის აუცილებელი პარამეტრი
 app.set('trust proxy', 1); 
 
 const server = http.createServer(app);
 
-// 2. CORS-ის მაქსიმალურად მოქნილი კონფიგურაცია
+// CORS-ის მაქსიმალურად მოქნილი კონფიგურაცია
 app.use(cors({ 
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:5174'
-    ],
+    origin: process.env.CLIENT_URL || 'http://localhost:5173', 
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -46,16 +45,20 @@ app.use(morgan('dev'));
 const io = new Server(server, {
     cors: { 
         origin: [
-            'http://localhost:5173' // 💡 და აქაც, სოკეტების სწორი მუშაობისთვის
+            'http://localhost:5173'
         ],
         credentials: true 
     }
 });
 
+app.get('/', (req, res) => {
+    res.send('Server is connected to database and working!');
+});
+
 // მონაცემთა ბაზასთან დაკავშირება
 connectDB();
 
-// 3. სესიის კონფიგურაცია (გასწორებული proxy-ით)
+
 app.use(session({
     name: 'session',
     keys: ['cyber-key'], 
@@ -63,7 +66,7 @@ app.use(session({
     secure: true,      
     sameSite: 'none',  
     httpOnly: true,
-    proxy: true // <-- Render-ზე ქუქიების მისაღებად
+    proxy: true // Render-ზე ქუქიების მისაღებად
 }));
 
 app.use(function(request, response, next) {

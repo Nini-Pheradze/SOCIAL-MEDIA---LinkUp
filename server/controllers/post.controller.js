@@ -160,13 +160,13 @@ const deletePost = catchAsync(async (req, res, next) => {
     if (!post) return res.status(404).json({ message: "Post not found" });
 
     if (post.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-        return res.status(403).json({ message: "თქვენ არ გაქვთ ამ პოსტის წაშლის უფლება" });
+        return res.status(403).json({ message: "You have no right to delete this post!" });
     }
 
     await Post.findByIdAndDelete(req.params.postId);
     await Comment.deleteMany({ post: req.params.postId });
 
-    res.status(200).json({ status: 'success', message: "პოსტი წაიშალა" });
+    res.status(200).json({ status: 'success', message: "Post Deleted" });
 });
 
 module.exports = { getAllPosts, postLike, addComment, deleteComment, editComment, deletePost, createPost, editPost, getPost, getMyPosts };

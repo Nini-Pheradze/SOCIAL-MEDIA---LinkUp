@@ -1,14 +1,6 @@
 const express = require('express');
 const postRouter = express.Router();
-const { 
-    postLike, 
-    addComment, 
-    deleteComment, 
-    editComment,
-    deletePost,
-    getAllPosts,
-    createPost,
-    editPost } = require('../controllers/post.controller');
+const { postLike, addComment, deleteComment, editComment, deletePost, getAllPosts, createPost, editPost } = require('../controllers/post.controller');
 const protect = require('../middlewares/protect.middleware');
 const upload = require('../utils/image')
 
